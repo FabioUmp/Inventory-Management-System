@@ -19,11 +19,29 @@ def update_stock(item: str, quantity:int) -> None:
         else:
             print(f"Stock for '{item}' updated successfully.")
 
-add_item("Apple", 0.5, 100)
-add_item("Banana", 0.2, 50)
-add_item("Apple", 0.6, 30)  # Should print an error
-update_stock("Apple", -20)
-update_stock("Banana", 30)
-update_stock("Orange", 10)  # Should print an error
-update_stock("Apple", -90)
-print(inventory)  
+def check_availability(item:str) -> None:
+    if item in inventory:
+        return inventory[item]["stock"]
+    else:
+        return "Item not found"
+
+def sales_report(sales: dict) -> str:
+    total = 0
+    for item, quantity in sales.items():
+        if item not in inventory:
+            print(f"Error: Item '{item}' not found.")
+            continue
+        elif inventory[item]["stock"] < quantity:
+            print(f"Error: Insufficient stock for '{item}'.")
+            continue
+        else:
+            inventory[item]["stock"] -= quantity
+            total += quantity * inventory[item]["price"]
+    return f"Total revenue: ${total:.2f}"
+
+add_item("Apple", 0.5, 50)
+add_item("Banana", 0.2, 60)
+sales = {"Apple": 30, "Banana": 20, "Orange": 10} 
+print(sales_report(sales))
+print(inventory)
+        
